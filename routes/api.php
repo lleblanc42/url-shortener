@@ -18,5 +18,7 @@ use App\Http\Controllers\ShortenController;
 Route::prefix('api')->group(function () {
     Route::get('/top', 'ShortenController@top');
 
-    Route::post('/shorten/{url}', 'ShortenController@shortenUrl');
+    Route::post('/shorten', 'ShortenController@shortenUrl');
 });
+
+Route::get('{url}', 'ShortenController@redirect');

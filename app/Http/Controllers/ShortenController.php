@@ -9,31 +9,45 @@ use Hashids\Hashids;
 
 class ShortenController extends Controller
 {
-    private const SHORTENED_BASEURL = env('APP_URL') . DIRECTORY_SEPARATOR;
+    private $shortenedBaseurl;
 
     private static $base = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+    public function __construct()
+    {
+        $this->shortenedBaseurl = env('APP_URL') . DIRECTORY_SEPARATOR;
+    }
 
     public function genShortenedUrl()
     {
         $hashids = new Hashids();
 
         do {
-            $shortenedUrl = $hashids->encode(1, 2, 3);
+            $shortenedUrl = $hashids->encode(random_int(0, 9), random_int(0, 9), random_int(0, 9));
 
             $checkUrl = ShortenedUrls::where('shortened_url', $shortenedUrl)->get();
-        } while (!empty($checkUrl));
+        } while (!$checkUrl->isEmpty());
 
         return $shortenedUrl;
+    }
+
+    public function incrementVisit($url)
+    {
+        $increment = ShortenedUrls::where('shortened_url', $url)->get()[0];
+
+        $increment->visited = $increment->visited + 1;
+
+        $increment->save();
     }
 
     public function top()
     {
         $topUrls = ShortenedUrls::select('source_url', 'shortened_url', 'visited', 'created_at')
-                                ->orderBy('visited')
+                                ->orderByDesc('visited')
                                 ->limit(100)
                                 ->get();
 
-        if (empty($topUrls)) return response()->json(['error' => 'No shortened urls available!']);
+        if ($topUrls->isEmpty()) return response()->json(['error' => 'No shortened urls available!']);
 
         return response()->json($topUrls);
     }
@@ -49,7 +63,7 @@ class ShortenController extends Controller
 
         $shortenedUrl->save();
 
-        return response()->json(["url" => self::SHORTENED_BASEURL . $shortenedUrl->shortened_url]);
+        return response()->json(["url" => $this->shortenedBaseurl . $shortenedUrl->shortened_url]);
     }
 
     public function redirect($url)
@@ -60,8 +74,10 @@ class ShortenController extends Controller
                                 ->where('shortened_url', $url)
                                 ->get();
 
-        if (empty($sourceUrl)) return response()->json(['error' => 'The shortened url could not be found!']);
+        if ($sourceUrl->isEmpty()) return response()->json(['error' => 'The shortened url could not be found!']);
 
-        return response()->json(['redirect_url' => $sourceUrl]);
+        $this->incrementVisit($url);
+
+        return response()->json(['redirect_url' => $sourceUrl[0]->source_url]);
     }
 }

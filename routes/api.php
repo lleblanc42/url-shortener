@@ -14,11 +14,3 @@ use App\Http\Controllers\ShortenController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::prefix('api')->group(function () {
-    Route::get('/top', 'ShortenController@top');
-
-    Route::post('/shorten', 'ShortenController@shortenUrl');
-});
-
-Route::get('{url}', 'ShortenController@redirect');

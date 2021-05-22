@@ -1,6 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShortenController;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::prefix('api')->group(function () {
+    Route::get('/top', [ShortenController::class, 'top']);
+
+    Route::post('/shorten', [ShortenController::class, 'shortenUrl']);
+});
+
+Route::get('{url}', [ShortenController::class, 'redirect']);
 
 Route::get('/', function () {
     return view('welcome');

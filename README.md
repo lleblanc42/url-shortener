@@ -30,6 +30,8 @@ php artisan key:generate
 php artisan migrate
 ```
 
+Ensure the webroot is set to the public folder within the old webroot
+
 ## How To Use
 
 ### Create Shortened URL

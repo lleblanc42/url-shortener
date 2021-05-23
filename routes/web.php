@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShortenController;
+use App\Http\Controllers\ShortenApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,12 +17,16 @@ use App\Http\Controllers\ShortenController;
 */
 
 Route::prefix('api')->group(function () {
-    Route::get('/top', [ShortenController::class, 'top']);
+    Route::get('{url}', [ShortenApiController::class, 'redirect']);
+    Route::get('/top', [ShortenApiController::class, 'top']);
 
-    Route::post('/shorten', [ShortenController::class, 'shortenUrl']);
+    Route::post('/shorten', [ShortenApiController::class, 'shortenUrl']);
 });
 
 Route::get('{url}', [ShortenController::class, 'redirect']);
+Route::get('/top', [ShortenController::class, 'top']);
+
+Route::post('/shorten', [ShortenController::class, 'shortenUrl']);
 
 Route::get('/', function () {
     return view('welcome');

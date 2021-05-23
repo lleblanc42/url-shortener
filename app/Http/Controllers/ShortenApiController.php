@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ShortenedUrls;
 use App\Http\Controllers\ShortenerHelperController;
 
-class ShortenController extends Controller
+class ShortenApiController extends Controller
 {
     private $shortenedBaseurl;
 

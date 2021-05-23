@@ -31,6 +31,8 @@ class ShortenApiController extends Controller
     {
         if (empty($request->url)) return response()->json(['error' => 'Missing url in the request!']);
 
+        if (!filter_var($request->url, FILTER_VALIDATE_URL)) return response()->json(['error' => 'Invalid url in the request!']);
+
         $shortenedUrl = new ShortenedUrls;
 
         $shortenedUrl->source_url = $request->url;

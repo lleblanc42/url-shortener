@@ -36,13 +36,15 @@
 @endsection
 
 @section('custom-js')
-    @if($nsfw == 1)
-        <script type="text/javascript">
-            $(document).ready(function () {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            @if($nsfw == 1)
                 $('#nsfwModal').modal('show');
 
                 setTimeout(function(){ window.location = "{{ $redirect_url }}"; }, 10000);
-            });
-        </script>
-    @endif
+            @else
+                setTimeout(function(){ window.location = "{{ $redirect_url }}"; }, 2000);
+            @endif
+        });
+    </script>
 @endsection

@@ -53,16 +53,16 @@ class ShortenController extends Controller
 
     public function redirect($url)
     {
-        if (empty($url)) return response()->json(['error' => 'Missing url in the request!']);
+        if (empty($url)) return view('redirect', ['error' => 'Missing url in the request!']);
 
-        $sourceUrl = ShortenedUrls::select('source_url')
+        $sourceUrl = ShortenedUrls::select('source_url', 'nsfw')
                                 ->where('shortened_url', $url)
                                 ->get();
 
-        if ($sourceUrl->isEmpty()) return response()->json(['error' => 'The shortened url could not be found!']);
+        if ($sourceUrl->isEmpty()) return view('redirect', ['error' => 'The shortened url could not be found!']);
 
         ShortenerHelperController::incrementVisit($url);
 
-        return response()->json(['redirect_url' => $sourceUrl[0]->source_url]);
+        return view('redirect', ['nsfw' => $sourceUrl[0]->nsfw, 'redirect_url' => $sourceUrl[0]->source_url]);
     }
 }

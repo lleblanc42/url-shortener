@@ -23,7 +23,7 @@ class ShortenerHelperController extends Controller
         return $shortenedUrl;
     }
 
-    public function incrementVisit($url)
+    public static function incrementVisit($url)
     {
         $increment = ShortenedUrls::where('shortened_url', $url)->get()[0];
 

@@ -1,8 +1,5 @@
 @extends('layouts.app')
 
-@section('custom-styles')
-@endsection
-
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -68,15 +65,13 @@
     </div>
 @endsection
 
-@section('modals')
-@endsection
-
 @section('custom-js')
     <script type="text/javascript">
         $(document).ready(function () {
             $('#top-tbl').DataTable({
                 "pageLength": 100,
                 "paging":   false,
+                "order": [[ 3, "desc" ]]
             });
         });
     </script>

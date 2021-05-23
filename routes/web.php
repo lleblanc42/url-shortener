@@ -17,14 +17,14 @@ use App\Http\Controllers\ShortenApiController;
 */
 
 Route::prefix('api')->group(function () {
-    Route::get('{url}', [ShortenApiController::class, 'redirect']);
     Route::get('/top', [ShortenApiController::class, 'top']);
+    Route::get('{url}', [ShortenApiController::class, 'redirect']);
 
     Route::post('/shorten', [ShortenApiController::class, 'shortenUrl']);
 });
 
-Route::get('{url}', [ShortenController::class, 'redirect']);
 Route::get('/top', [ShortenController::class, 'top']);
+Route::get('{url}', [ShortenController::class, 'redirect']);
 
 Route::post('/shorten', [ShortenController::class, 'shortenUrl']);
 

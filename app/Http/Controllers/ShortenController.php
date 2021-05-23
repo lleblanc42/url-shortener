@@ -30,9 +30,9 @@ class ShortenController extends Controller
                                 ->limit(100)
                                 ->get();
 
-        if ($topUrls->isEmpty()) return response()->json(['error' => 'No shortened urls available!']);
+        if ($topUrls->isEmpty()) return view('top', ['error' => 'No shortened urls available!']);
 
-        return response()->json($topUrls);
+        return view('top', ['topUrls' => $topUrls]);
     }
 
     public function shortenUrl(Request $request)

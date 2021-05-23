@@ -10,7 +10,7 @@ class ShortenerHelperController extends Controller
 {
     private static $base = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
-    public function genShortenedUrl()
+    public static function genShortenedUrl()
     {
         $hashids = new Hashids();
 

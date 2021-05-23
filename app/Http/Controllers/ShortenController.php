@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\ShortenedUrls;
 use App\Http\Controllers\ShortenerHelperController;
 
@@ -13,6 +14,13 @@ class ShortenController extends Controller
     public function __construct()
     {
         $this->shortenedBaseurl = env('APP_URL') . DIRECTORY_SEPARATOR;
+    }
+
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'url' => ['required', 'url', 'active_url'],
+        ]);
     }
 
     public function top()
@@ -29,7 +37,7 @@ class ShortenController extends Controller
 
     public function shortenUrl(Request $request)
     {
-        if (empty($request->url)) return response()->json(['error' => 'Missing url in the request!']);
+        $this->validator($request->all())->validate();
 
         $shortenedUrl = new ShortenedUrls;
 
@@ -40,7 +48,7 @@ class ShortenController extends Controller
 
         $shortenedUrl->save();
 
-        return response()->json(["url" => $this->shortenedBaseurl . $shortenedUrl->shortened_url]);
+        return view('shortened', ["url" => $this->shortenedBaseurl . $shortenedUrl->shortened_url]);
     }
 
     public function redirect($url)
